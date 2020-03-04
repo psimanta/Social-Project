@@ -1,0 +1,73 @@
+{% extends 'navbar.html' %}
+{%block title_block %} {{title}} {%endblock%}
+
+
+{%block body_block%}
+{% if search %}
+{% for user in result %}
+<div class="row">
+  <div class="col-sm-2">
+    {% if user.user_profile.profile_pic %}
+    <img src="/media/{{user.user_profile.profile_pic}}" width="75px" height="75px" class="rounded-circle">
+    {% else %}
+    <img src="/media/default.png" width="75px" height="75px" class="rounded-circle">
+    {% endif %}
+  </div>
+  <div class="col-sm-10">
+    <a href="{% url 'App_Login:user' username=user.username %}">{{user.username}}</a>
+    <br>
+    {{user.user_profile.full_name}}
+  </div>
+</div>
+<br>
+{% endfor %}
+{% else %}
+<div class="row">
+  <div class="col-sm-8">
+
+      {% for post in posts %}
+      <div style="border: 1px solid #888888;">
+        <div style="padding:10px">
+          {% if post.author.user_profile.profile_pic %}
+            <img src="/media/{{user.user_profile.profile_pic}}" width="40px" height="40px" class="rounded-circle">
+          {% else %}
+            <img src="/media/default.png" width="40px" height="40px" class="rounded-circle">
+          {% endif %}
+          <a href="{% url 'App_Login:user' username=post.author %}">{{post.author}}</a>
+        </div>
+        <img src='/media/{{post.image}}' width="100%">
+        <div style="padding:20px">
+          {{post.caption}}<br>
+          {{ post.liked_post.count }} Likes <br>
+          {% if post.pk in liked_post_list %}
+          <a href="{% url 'App_Posts:unliked' pk=post.pk %}"><i class="fa fa-heart" style="font-size:36px"></i></a>
+          {% else %}
+          <a href="{% url 'App_Posts:liked' pk=post.pk %}"><i class="fa fa-heart-o" style="font-size:36px"></i></a>
+          {% endif %}
+        </div>
+      </div>
+      <br>
+      <br>
+      {% endfor %}
+
+  </div>
+  <div class="col-sm-4">
+    <div class="row">
+      <div class="col-sm-4">
+        {% if user.user_profile.profile_pic %}
+        <img src="/media/{{user.user_profile.profile_pic}}" width="75px" height="75px" class="rounded-circle">
+        {% else %}
+        <img src="/media/default.png" width="75px" height="75px" class="rounded-circle">
+        {% endif %}
+      </div>
+      <div class="col-sm-8">
+        {{user.username}}
+        <br>
+        {{user.user_profile.full_name}}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endif %}
+{%endblock%}
